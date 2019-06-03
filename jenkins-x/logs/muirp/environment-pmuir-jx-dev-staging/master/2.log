@@ -1,0 +1,74 @@
+Step: build-step-credential-initializer:
+
+{"level":"warn","ts":1559574444.8359904,"logger":"fallback-logger","caller":"logging/config.go:65","msg":"Fetch GitHub commit ID from kodata failed: \"ref: refs/heads/test\" is not a valid GitHub commit ID"}
+{"level":"info","ts":1559574444.8366117,"logger":"fallback-logger","caller":"creds-init/main.go:40","msg":"Credentials initialized."}
+Step: build-step-git-source-0:
+
+{"level":"warn","ts":1559574445.8038354,"logger":"fallback-logger","caller":"logging/config.go:65","msg":"Fetch GitHub commit ID from kodata failed: \"ref: refs/heads/test\" is not a valid GitHub commit ID"}
+{"level":"info","ts":1559574446.9284852,"logger":"fallback-logger","caller":"git-init/main.go:92","msg":"Successfully cloned \"https://github.com/muirp/environment-*****-**-dev-staging.git\" @ \"356a4e4f662c8146821206182982c582d4d0e47d\" in path \"/workspace\""}
+Step: build-step-apply:
+
+Modified file /workspace/env/Chart.yaml to set the chart to version 2
+Adding missing Helm repo: jenkins-x http://chartmuseum.jenkins-x.io
+Successfully added Helm repository jenkins-x.
+Adding missing Helm repo: releases http://jenkins-x-chartmuseum:8080
+Successfully added Helm repository releases.
+Applying helm chart at . as release name ** to namespace **-staging
+Ignoring templates/.gitignore
+Wrote chart values.yaml values.yaml generated from directory tree
+generated helm values.yaml
+
+PipelineSecrets: {}
+cleanup:
+  Annotations:
+    helm.sh/hook: pre-delete
+    helm.sh/hook-delete-policy: hook-succeeded
+  Args:
+  - --cleanup
+controllerbuild:
+  enabled: true
+expose:
+  Annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-delete-policy: hook-succeeded
+  Args:
+  - --v
+  - 4
+  config:
+    domain: 35.204.249.251.nip.io
+    exposer: Ingress
+    http: "true"
+jenkins:
+  Servers:
+    Global:
+      EnvVars:
+        TILLER_NAMESPACE: kube-system
+  enabled: false
+prow: {}
+
+
+Using values files: values.yaml
+Applying chart overrides
+Applying generated chart . YAML via kubectl in dir: /tmp/helm-template-workdir-885028297/**/output
+deployment.extensions/**-bdd-spring-1559574145 created
+release.jenkins.io/bdd-spring-1559574145-0.0.1 created
+service/bdd-spring-1559574145 created
+role.rbac.authorization.k8s.io/cleanup configured
+rolebinding.rbac.authorization.k8s.io/cleanup configured
+serviceaccount/cleanup configured
+configmap/exposecontroller configured
+role.rbac.authorization.k8s.io/expose configured
+rolebinding.rbac.authorization.k8s.io/expose configured
+serviceaccount/expose configured
+deployment.extensions/**-test configured
+release.jenkins.io/test-0.0.1 configured
+service/test configured
+
+Applying Helm hook post-upgrade YAML via kubectl in file: /tmp/helm-template-workdir-885028297/**/helmHooks/env/charts/expose/templates/job.yaml
+job.batch/expose created
+
+Waiting for helm post-upgrade hook Job expose to complete before removing it
+Deleting helm hook sources from file: /tmp/helm-template-workdir-885028297/**/helmHooks/env/charts/expose/templates/job.yaml
+job.batch "expose" deleted
+Removing Kubernetes resources from older releases using selector: jenkins.io/chart-release=**,jenkins.io/version!=2 from all pvc configmap release sa role rolebinding secret
+Removing Kubernetes resources from older releases using selector: jenkins.io/chart-release=**,jenkins.io/version!=2,jenkins.io/namespace=**-staging from clusterrole clusterrolebinding
